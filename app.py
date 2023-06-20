@@ -1,7 +1,6 @@
 import openai
 import gradio as gr
 
-openai.api_key = "...."
 
 messages = [
     {"role": "system", "content": "You are an AI specialized in solving Interview questions and tips to cracking them.Do not answer anything other than Interview-related queries."},
@@ -16,9 +15,16 @@ def chatbot(input):
         messages.append({"role": "assistant", "content": reply})
         return reply
 
+
 inputs = gr.inputs.Textbox(lines=7, label="Chat with Interview AI")
+
+input1= gr.inputs.Textbox(placeholder="OPENAI KEY")
+openai.api_key = input1
 outputs = gr.outputs.Textbox(label="Reply")
 
-gr.Interface(fn=chatbot, inputs=inputs, outputs=outputs, title="IntiAI Chatbot",
+def update_textbox(input1):
+    input1.visible=False
+
+gr.Interface(fn=chatbot, inputs=[input1,inputs], outputs=outputs, title="IntiAI Chatbot",
              description="Ask Interview related questions.",
-             theme="compact").launch(share=True)
+             theme="compact",on_submit=update_textbox).launch(share=True)
